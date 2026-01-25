@@ -64,3 +64,38 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('section').forEach(section => {
     observer.observe(section);
 });
+
+// --- Carousel Logic ---
+const carouselContainer = document.querySelector('.carousel-container');
+const carouselItems = document.querySelectorAll('.carousel-item');
+const indicatorsContainer = document.querySelector('.carousel-indicators');
+
+if (carouselContainer && items.length > 0) {
+    // Generate Dots
+    carouselItems.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('indicator-dot');
+        if (index === 0) dot.classList.add('active');
+
+        dot.addEventListener('click', () => {
+            carouselItems[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        });
+
+        indicatorsContainer.appendChild(dot);
+    });
+
+    // Update Dots on Scroll
+    const carouselObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                const index = Array.from(carouselItems).indexOf(entry.target);
+
+                document.querySelectorAll('.indicator-dot').forEach(d => d.classList.remove('active'));
+                const activeDot = indicatorsContainer.children[index];
+                if (activeDot) activeDot.classList.add('active');
+            }
+        });
+    }, { root: carouselContainer, threshold: 0.5 });
+
+    carouselItems.forEach(item => carouselObserver.observe(item));
+}
