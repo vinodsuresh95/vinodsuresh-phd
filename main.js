@@ -2,23 +2,6 @@
  * AI Safety Portfolio Logic
  * Calibrated Particle System for "Safe Data Flows"
  */
-// import { particlesCursor } from 'https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js'
-
-const pc = particlesCursor({
-    el: document.getElementById('app'),
-    gpgpuSize: 512,
-    colors: [0x003a8c, 0x006d75], // Research Blue and Safety Teal
-    color: 0x003a8c,
-    coordScale: 0.6,
-    noiseIntensity: 0.0005, // Very subtle, stable noise
-    noiseTimeCoef: 0.0001,
-    pointSize: 2, // Fine, precise data points
-    pointDecay: 0.004, // Quick decay for a clean, non-distracting look
-    sleepRadiusX: 250,
-    sleepRadiusY: 250,
-    sleepTimeCoefX: 0.001,
-    sleepTimeCoefY: 0.001
-});
 
 // Sync with light theme
 pc.uniforms.uColor.value.set(0x003a8c);
