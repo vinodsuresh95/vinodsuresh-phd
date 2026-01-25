@@ -70,7 +70,7 @@ const carouselContainer = document.querySelector('.carousel-container');
 const carouselItems = document.querySelectorAll('.carousel-item');
 const indicatorsContainer = document.querySelector('.carousel-indicators');
 
-if (carouselContainer && items.length > 0) {
+if (carouselContainer && carouselItems.length > 0) {
     // Generate Dots
     carouselItems.forEach((_, index) => {
         const dot = document.createElement('div');
