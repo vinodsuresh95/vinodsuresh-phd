@@ -2,7 +2,7 @@
  * AI Safety Portfolio Logic
  * Calibrated Particle System for "Safe Data Flows"
  */
-import { particlesCursor } from 'https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js'
+// import { particlesCursor } from 'https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js'
 
 const pc = particlesCursor({
     el: document.getElementById('app'),
@@ -66,36 +66,38 @@ document.querySelectorAll('section').forEach(section => {
 });
 
 // --- Carousel Logic ---
-const carouselContainer = document.querySelector('.carousel-container');
-const carouselItems = document.querySelectorAll('.carousel-item');
-const indicatorsContainer = document.querySelector('.carousel-indicators');
+document.addEventListener('DOMContentLoaded', () => {
+    const carouselContainer = document.querySelector('.carousel-container');
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    const indicatorsContainer = document.querySelector('.carousel-indicators');
 
-if (carouselContainer && carouselItems.length > 0) {
-    // Generate Dots
-    carouselItems.forEach((_, index) => {
-        const dot = document.createElement('div');
-        dot.classList.add('indicator-dot');
-        if (index === 0) dot.classList.add('active');
+    if (carouselContainer && carouselItems.length > 0) {
+        // Generate Dots
+        carouselItems.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('indicator-dot');
+            if (index === 0) dot.classList.add('active');
 
-        dot.addEventListener('click', () => {
-            carouselItems[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            dot.addEventListener('click', () => {
+                carouselItems[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            });
+
+            indicatorsContainer.appendChild(dot);
         });
 
-        indicatorsContainer.appendChild(dot);
-    });
+        // Update Dots on Scroll
+        const carouselObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    const index = Array.from(carouselItems).indexOf(entry.target);
 
-    // Update Dots on Scroll
-    const carouselObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                const index = Array.from(carouselItems).indexOf(entry.target);
+                    document.querySelectorAll('.indicator-dot').forEach(d => d.classList.remove('active'));
+                    const activeDot = indicatorsContainer.children[index];
+                    if (activeDot) activeDot.classList.add('active');
+                }
+            });
+        }, { root: carouselContainer, threshold: 0.5 });
 
-                document.querySelectorAll('.indicator-dot').forEach(d => d.classList.remove('active'));
-                const activeDot = indicatorsContainer.children[index];
-                if (activeDot) activeDot.classList.add('active');
-            }
-        });
-    }, { root: carouselContainer, threshold: 0.5 });
-
-    carouselItems.forEach(item => carouselObserver.observe(item));
-}
+        carouselItems.forEach(item => carouselObserver.observe(item));
+    }
+});
