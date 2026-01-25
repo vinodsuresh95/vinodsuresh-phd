@@ -36,8 +36,8 @@ body {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     gap: 32px;
-    padding-bottom: 40px;
-    /* More space for shadow */
+    padding-bottom: 32px;
+    /* Reduced space for shadow */
     margin: 0;
     padding-left: 0;
     padding-right: 0;
@@ -143,13 +143,14 @@ body {
     margin-top: 16px;
 }
 
-.indicator-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--border-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background-color: var(--muted-color);
+/* Darker gray for visibility */
+opacity: 0.3;
+cursor: pointer;
+transition: all 0.2s ease;
 }
 
 .indicator-dot.active {
