@@ -124,6 +124,94 @@
 
                     <div class="case-study-card-minimal carousel-item">
                         <div class="card-header-min">
+                            <h3>POLARIS: Universal Policy Representation for Cross-Embodiment Robotics</h3>
+                            <span class="tag-min">Dissertation</span>
+                        </div>
+                        <p class="tagline-min">Transferring Robot Skills Across Different Morphologies Without Target-Robot Retraining.</p>
+
+                        <div class="card-grid-min">
+                            <div class="col">
+                                <h4>The Research Problem</h4>
+                                <p>Robot policies are typically tied to a specific embodiment, making skill reuse across heterogeneous robots expensive and difficult.</p>
+                            </div>
+                            <div class="col">
+                                <h4>The Framework</h4>
+                                <p><strong>POLARIS</strong> combines VQ-VAE action tokenization, graph-based morphology encoding, and Transformer policies to learn transferable latent action representations across different robotic platforms.</p>
+                            </div>
+                        </div>
+
+                        <div class="results-min">
+                            <h4>Research Scope</h4>
+                            <ul>
+                                <li><strong>Embodiments:</strong> Franka Panda, UR5, and lower-DOF/custom manipulators.</li>
+                                <li><strong>Tasks:</strong> Reach, Push Button, Open Drawer, Pick-and-Lift.</li>
+                                <li><strong>Evaluation:</strong> Zero-shot transfer, trajectory similarity, reconstruction error, and cross-robot generalization.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="case-study-card-minimal carousel-item">
+                        <div class="card-header-min">
+                            <h3>Entropy-Adaptive Tokenization for Robot Sensorimotor Sequences</h3>
+                            <span class="tag-min">Research</span>
+                        </div>
+                        <p class="tagline-min">Testing Whether Information-Adaptive Sequence Chunking Improves Robot Learning.</p>
+
+                        <div class="card-grid-min">
+                            <div class="col">
+                                <h4>The Idea</h4>
+                                <p>Instead of tokenizing robot trajectories with fixed-size windows, the method adapts token boundaries using local sensorimotor entropy and interaction signals.</p>
+                            </div>
+                            <div class="col">
+                                <h4>The Experiment</h4>
+                                <p>Compared entropy-adaptive and uniform chunking under matched token budgets using repeated simulation runs and simulator contact signals.</p>
+                            </div>
+                        </div>
+
+                        <div class="results-min">
+                            <h4>Key Finding</h4>
+                            <ul>
+                                <li><strong>Evidence-driven result:</strong> Uniform chunking matched or outperformed adaptive tokenization in the evaluated setting.</li>
+                                <li><strong>Entropy/contact correlation:</strong> r = 0.10, suggesting entropy alone was a weak proxy for interaction boundaries.</li>
+                                <li><strong>Outcome:</strong> Accepted for presentation; results motivate richer event-aware tokenization strategies.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="case-study-card-minimal carousel-item">
+                        <div class="card-header-min">
+                            <h3>BreakBot: AI Security Audit Workbench</h3>
+                            <span class="tag-min">AI Security</span>
+                        </div>
+                        <p class="tagline-min">Human-Reviewed Security Testing for Authorized Client Applications.</p>
+
+                        <div class="card-grid-min">
+                            <div class="col">
+                                <h4>The Problem</h4>
+                                <p>Security assessments need repeatable automated probing while preserving human review, client authorization, evidence control, and safe handling of credentials.</p>
+                            </div>
+                            <div class="col">
+                                <h4>The Solution</h4>
+                                <p>Built <strong>BreakBot</strong> as a local-first audit workbench that runs controlled security probes, supports manual FAIL/PARTIAL review, redacts sensitive evidence, and exports reviewed HTML reports.</p>
+                            </div>
+                        </div>
+
+                        <div class="results-min">
+                            <h4>Safety-by-Design</h4>
+                            <ul>
+                                <li><strong>Local-first:</strong> Backend binds to 127.0.0.1 by default.</li>
+                                <li><strong>Human-in-the-loop:</strong> Findings are confirmed, rejected, or excluded before final reporting.</li>
+                                <li><strong>Evidence controls:</strong> Secret redaction, HTTPS enforcement, audit deletion, and credential rotation workflow.</li>
+                            </ul>
+                        </div>
+
+                        <div class="links-min">
+                            <a href="https://github.com/vinodsuresh95/breakbot-app" target="_blank">GitHub Repo ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="case-study-card-minimal carousel-item">
+                        <div class="card-header-min">
                             <h3>GTA-5 Video Analysis: Context-Aware Narration</h3>
                             <span class="tag-min">Multimodal</span>
                         </div>
