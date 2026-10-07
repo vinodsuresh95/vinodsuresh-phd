@@ -1,152 +1,37 @@
-/**
- * AI Safety Portfolio Logic
- * Calibrated Particle System for "Safe Data Flows"
- */
-
-// Sync with light theme (defensive)
-try {
-    if (typeof pc !== 'undefined' && pc.uniforms && pc.uniforms.uColor) {
-        pc.uniforms.uColor.value.set(0x003a8c);
-    }
-} catch (err) {
-    console.warn('Particle color sync skipped', err);
-}
-
-// Click pulse (defensive)
-document.body.addEventListener('click', (e) => {
-    try {
-        if (e.target.tagName !== 'A' && typeof pc !== 'undefined' && pc.uniforms && pc.uniforms.uPointSize) {
-            const originalSize = pc.uniforms.uPointSize.value;
-            pc.uniforms.uPointSize.value = 5;
-            setTimeout(() => {
-                pc.uniforms.uPointSize.value = originalSize;
-            }, 150);
-        }
-    } catch (err) { /* ignore */ }
-});
-
-// --- Scroll Spy Logic ---
-const observerOptions = {
-    root: null,
-    rootMargin: '-20% 0px -60% 0px',
-    threshold: 0
+const details = {
+  polaris: {label:'DOCTORAL RESEARCH / POLARIS',title:'Can a skill outlive the body that learned it?',intro:'Universal Policy Representation for Cross-Embodiment Robotics. My doctoral research investigates how learned robot skills can transfer between different morphologies.',sections:[['The question','Robot policies are usually tied to a particular embodiment. Transferring a skill to another robot can require expensive retraining. POLARIS studies transferable latent action representations.'],['The approach','The framework combines VQ-VAE action tokenization, graph-based morphology encoding, and Transformer policies. It investigates shared representations across Franka Panda, UR5, and lower-DOF or custom manipulators.'],['What I evaluate','Tasks include reaching, pushing a button, opening a drawer, and pick-and-lift. Evaluation focuses on zero-shot transfer, trajectory similarity, reconstruction error, and cross-robot generalization.'],['Research status','This is an ongoing research framework. Transfer is the research objective; the diagram on this page illustrates the concept rather than a claim that all robots or tasks have already been validated.']],links:[]},
+  sentinel:{label:'AI SAFETY / SENTINEL',title:'Safety should be part of the action.',intro:'A neuro-symbolic firewall for AI agents that enforces explicit constraints on tool calls.',sections:[['The problem','An agent can produce a plausible instruction that violates the rules of its environment. Prompt-based guardrails alone do not enforce deterministic action constraints.'],['What I built','Deterministic middleware that intercepts tool calls and applies hard logic constraints before execution. The project explores stateless, RAM-only processing and low-latency enforcement.'],['The experiment','The existing project reports a highway-env simulation with no collisions for the shielded policy in its evaluated setup. These are simulation results, with limits determined by the tested environment.']],links:[['View source','https://github.com/vinodsuresh95/neuro-symbolic-safety-shield'],['Read paper','https://github.com/vinodsuresh95/neuro-symbolic-safety-shield/blob/main/paper/A%20Neuro-Symbolic%20Shielding%20Framework%20for%20End-to-End%20Autonomous%20Driving.pdf']]},
+  breakbot:{label:'AI SECURITY / BREAKBOT',title:'Automation with a human in the loop.',intro:'A local-first AI security audit workbench for authorized client applications.',sections:[['The problem','Repeatable security probes need evidence control, authorization, and human judgment before findings become a report.'],['What I built','Controlled security probes, manual FAIL/PARTIAL review, sensitive-evidence redaction, and reviewed HTML report exports. Findings can be confirmed, rejected, or excluded.'],['Design choices','The backend binds to 127.0.0.1 by default. Evidence controls include secret redaction, HTTPS enforcement, audit deletion, and a credential-rotation workflow.']],links:[['View source','https://github.com/vinodsuresh95/breakbot-app']]},
+  gta:{label:'MULTIMODAL AI / SCENESENSE',title:'From seeing a scene to telling its story.',intro:'Context-aware gameplay narration with a multi-agent AI pipeline.',sections:[['The challenge','Gameplay changes quickly. Useful narration must connect scene actions, detected objects, and emotional tone.'],['The pipeline','BLIP-2 provides scene understanding, YOLOv8 detects objects, and an LLM turns that context into narration with different styles.'],['The goal','Produce commentary grounded in video events, rather than descriptions that merely sound plausible.']],links:[['View source','https://github.com/vinodsuresh95/gta5-video-analysis']]},
+  entropy:{label:'RESEARCH / ENTROPY-ADAPTIVE TOKENIZATION',title:'An experiment that changed the next question.',intro:'Testing whether information-adaptive sequence chunking improves robot learning.',sections:[['The hypothesis','Rather than fixed-size trajectory windows, token boundaries adapt to local sensorimotor entropy and interaction signals.'],['The comparison','Entropy-adaptive and uniform chunking were compared under matched token budgets using repeated simulation runs and simulator contact signals.'],['The finding','Uniform chunking matched or outperformed adaptive tokenization in the evaluated setting. The entropy/contact correlation was r = 0.10, suggesting entropy alone was a weak proxy for interaction boundaries.'],['What comes next','The work was accepted for presentation. The findings motivate richer event-aware tokenization strategies instead of assuming entropy-based boundaries are inherently better.']],links:[]}
 };
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
-            const id = entry.target.getAttribute('id');
-            const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
-            if (activeLink) activeLink.classList.add('active');
-        }
-    });
-}, observerOptions);
-
-document.querySelectorAll('section').forEach(section => observer.observe(section));
-
-// --- Carousel Logic & Accessible Dots ---
-document.addEventListener('DOMContentLoaded', () => {
-    const carouselContainer = document.querySelector('.carousel-container');
-    const carouselItems = document.querySelectorAll('.carousel-item');
-    let indicatorsContainer = document.querySelector('.carousel-indicators');
-
-    if (carouselContainer && carouselItems.length > 0) {
-        // Ensure the indicators container exists
-        if (!indicatorsContainer) {
-            indicatorsContainer = document.createElement('div');
-            indicatorsContainer.className = 'carousel-indicators';
-            carouselContainer.insertAdjacentElement('afterend', indicatorsContainer);
-        }
-        indicatorsContainer.style.display = 'flex';
-        indicatorsContainer.setAttribute('role', 'tablist');
-
-        // Generate dots as buttons (keyboard-accessible)
-        carouselItems.forEach((_, index) => {
-            const dot = document.createElement('button');
-            dot.classList.add('indicator-dot');
-            dot.type = 'button';
-            dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
-            dot.setAttribute('role', 'tab');
-            dot.tabIndex = 0;
-            if (index === 0) dot.classList.add('active');
-
-            dot.addEventListener('click', () => {
-                carouselItems[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                dot.focus();
-            });
-
-            dot.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') {
-                    const prev = Math.max(0, index - 1);
-                    carouselItems[prev].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                } else if (e.key === 'ArrowRight') {
-                    const next = Math.min(carouselItems.length - 1, index + 1);
-                    carouselItems[next].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                }
-            });
-
-            indicatorsContainer.appendChild(dot);
-        });
-
-        // Update active dot when slides intersect
-        const carouselObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                    const index = Array.from(carouselItems).indexOf(entry.target);
-                    document.querySelectorAll('.indicator-dot').forEach(d => d.classList.remove('active'));
-                    const activeDot = indicatorsContainer.children[index];
-                    if (activeDot) activeDot.classList.add('active');
-                }
-            });
-        }, { root: carouselContainer, threshold: 0.5 });
-
-        carouselItems.forEach(item => carouselObserver.observe(item));
-    }
-});
-
-// -------------------- Particle toggle --------------------
-(function setupParticleToggle(){
-    function initToggle() {
-        document.body.classList.add('no-particles'); // hidden by default
-
-        const btn = document.createElement('button');
-        btn.id = 'particles-toggle';
-        btn.type = 'button';
-        btn.setAttribute('aria-pressed', 'false');
-        btn.textContent = 'Particles: Off';
-        btn.style.cssText = [
-            'position:fixed',
-            'bottom:16px',
-            'right:16px',
-            'z-index:9999',
-            'padding:8px 10px',
-            'border-radius:6px',
-            'border:1px solid rgba(0,0,0,0.08)',
-            'background:#fff',
-            'color:#111',
-            'font-size:13px',
-            'box-shadow:0 6px 18px rgba(0,0,0,0.08)',
-            'cursor:pointer',
-            'backdrop-filter: blur(6px)'
-        ].join(';');
-
-        btn.addEventListener('click', () => {
-            const nowOn = !document.body.classList.toggle('no-particles');
-            btn.textContent = nowOn ? 'Particles: On' : 'Particles: Off';
-            btn.setAttribute('aria-pressed', nowOn.toString());
-        });
-
-        document.addEventListener('keydown', (e) => {
-            const active = document.activeElement;
-            const inInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
-            if (inInput) return;
-            if (e.key === 'p' || e.key === 'P') btn.click();
-        });
-
-        document.body.appendChild(btn);
-    }
-
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initToggle);
-    else initToggle();
-})();
+const dialog=document.querySelector('.project-dialog');
+const detail=document.querySelector('#project-detail');
+document.querySelectorAll('[data-project]').forEach(button=>button.addEventListener('click',()=>{
+  const project=details[button.dataset.project];detail.replaceChildren();
+  const label=document.createElement('p');label.className='eyebrow';label.textContent=project.label;detail.append(label);
+  const title=document.createElement('h2');title.id='detail-title';title.textContent=project.title;detail.append(title);
+  const intro=document.createElement('p');intro.textContent=project.intro;detail.append(intro);
+  project.sections.forEach(([heading,body])=>{const h=document.createElement('h3');h.textContent=heading;const p=document.createElement('p');p.textContent=body;detail.append(h,p)});
+  const links=document.createElement('div');links.className='detail-links';project.links.forEach(([text,url])=>{const a=document.createElement('a');a.textContent=text;a.href=url;a.target='_blank';a.rel='noopener';links.append(a)});detail.append(links);dialog.showModal();
+}));
+document.querySelector('.dialog-close').addEventListener('click',()=>dialog.close());
+dialog.addEventListener('click',event=>{const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close()});
+const guide=document.querySelector('#guide');const launch=document.querySelector('.guide-launch');const message=document.querySelector('#guide-message');
+let tourIndex=-1;
+function openGuide(){guide.hidden=false;launch.setAttribute('aria-expanded','true')}
+function cancelSpeech(){if('speechSynthesis'in window)window.speechSynthesis.cancel();document.querySelector('.read-aloud').textContent='Read aloud'}
+function closeGuide(){guide.hidden=true;launch.setAttribute('aria-expanded','false');endTour();cancelSpeech();launch.focus()}
+launch.addEventListener('click',()=>guide.hidden?openGuide():closeGuide());document.querySelector('.guide-close').addEventListener('click',closeGuide);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!guide.hidden&&!dialog.open)closeGuide()});
+const topics={research:{target:'research',text:'POLARIS is Vinod’s doctoral research at Walsh College. It asks whether a robot can reuse a skill learned by a robot with a different body, using action tokens, morphology encoding, and Transformer policies. I’ve brought you to the research desk.'},experience:{target:'journey',text:'Vinod is a Technical Lead at CitiusTech, leading production healthcare AI/ML engineering. Previously, he was a Senior Machine Learning Engineer at Microsoft and a Principal Analyst at AB-InBev. Here’s his journey.'},projects:{target:'projects',text:'Explore Sentinel for AI safety, BreakBot for security auditing, and SceneSense / GTA-5 for multimodal narration. Open any case study to see the problem, approach, and source links.'}};
+document.querySelectorAll('[data-topic]').forEach(b=>b.addEventListener('click',()=>{endTour();cancelSpeech();const t=topics[b.dataset.topic];message.textContent=t.text;document.getElementById(t.target).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}));
+const stops=[['home','Welcome to Vinod’s desk. The robot opens his robotics research, the laptop leads to his projects, the notebook holds experiments, and the postcards lead to his career.'],['about','Meet Vinod: an AI/ML Technical Lead and doctoral researcher who connects production engineering with research.'],['research','This is POLARIS, his doctoral research on transferring skills between different robot bodies. Open the notebook for the approach and evaluation scope.'],['projects','Here are three working systems: Sentinel, BreakBot, and SceneSense / GTA-5. Each card opens a case study with its source links.'],['notes','This notebook contains an honest result: uniform chunking matched or outperformed entropy-adaptive tokenization in the evaluated setting. Research includes learning when a hypothesis does not win.'],['journey','Vinod’s journey includes production AI at CitiusTech, machine learning engineering at Microsoft, and analytics at AB-InBev.'],['contact','That’s the tour. You can contact Vinod, explore his GitHub and LinkedIn, or download his résumé here. Thanks for visiting!']];
+function showStop(){cancelSpeech();document.querySelectorAll('.tour-target').forEach(el=>el.classList.remove('tour-target'));const[id,text]=stops[tourIndex];const el=document.getElementById(id);el.classList.add('tour-target');el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});message.textContent=text;document.querySelector('.tour-progress').textContent=`${tourIndex+1} / ${stops.length}`;document.querySelector('.tour-next').textContent=tourIndex===stops.length-1?'Finish tour':'Next stop'}
+function endTour(){tourIndex=-1;document.querySelector('.tour-controls').hidden=true;document.querySelectorAll('.tour-target').forEach(el=>el.classList.remove('tour-target'))}
+document.querySelectorAll('[data-tour]').forEach(b=>b.addEventListener('click',()=>{openGuide();tourIndex=0;document.querySelector('.tour-controls').hidden=false;showStop()}));
+document.querySelector('.tour-next').addEventListener('click',()=>{if(tourIndex>=stops.length-1){endTour();return}tourIndex++;showStop()});
+document.querySelector('.tour-end').addEventListener('click',()=>{endTour();cancelSpeech();message.textContent='Explore at your own pace. Pick a topic whenever you’d like a hand.'});
+const readButton=document.querySelector('.read-aloud');
+if(!('speechSynthesis'in window)){readButton.hidden=true}else{readButton.addEventListener('click',()=>{if(window.speechSynthesis.speaking){cancelSpeech();readButton.textContent='Read aloud';return}const speech=new SpeechSynthesisUtterance(message.textContent);speech.rate=.97;speech.onend=()=>readButton.textContent='Read aloud';speech.onerror=()=>readButton.textContent='Read aloud';window.speechSynthesis.speak(speech);readButton.textContent='Stop reading'})}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelSpeech()});
